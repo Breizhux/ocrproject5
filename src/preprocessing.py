@@ -8,7 +8,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder, LabelEncoder, FunctionTransformer
 
-
+# --- Classes de Feature Engineering ---
 class FeatureEngineer(BaseEstimator, TransformerMixin):
     def fit(self, X, y=None):
         return self
@@ -71,7 +71,10 @@ class SalaryRatioEncoder(BaseEstimator, TransformerMixin):
         X['salary_to_dept_median'] = X['revenu_mensuel'] / X['departement'].map(self.department_median)
         return X
 
-# --- Fonctions de Transformation ---
+# --- Fonctions de Transformation (Nommées pour Pickle) ---
+def drop_columns_transform(X):
+    return X.drop(columns=[c for c in COLUMNS_TO_DROP if c in X.columns], errors='ignore')
+
 def label_encode_transform(X):
     X_encoded = X.copy()
     for col in X_encoded.columns:
@@ -122,9 +125,7 @@ categorical_map_pipeline = Pipeline([('mapper', FunctionTransformer(map_frequenc
 preprocessing_pipeline = Pipeline([
     ('feature_engineer', FeatureEngineer()),
     ('salary_ratio', SalaryRatioEncoder()),
-    ('drop_columns', FunctionTransformer(
-        lambda X: X.drop(columns=[c for c in COLUMNS_TO_DROP if c in X.columns], errors='ignore')
-    )),
+    ('drop_columns', FunctionTransformer(drop_columns_transform)),
     ('map_frequency', categorical_map_pipeline),
     ('column_transformer', ColumnTransformer([
         ('num', numeric_pipeline, NUMERIC_FEATURES + NUMERIC_BY_FEATURES_ENGINEERING),

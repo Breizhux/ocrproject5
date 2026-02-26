@@ -7,12 +7,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_selection import SelectFromModel
 from sklearn.metrics import classification_report
-from imblearn.pipeline import Pipeline as ImbPipeline
+from sklearn.pipeline import Pipeline
 from src.preprocessing import preprocessing_pipeline
 from src.data import load_data
-
-def apply_preprocessing(X, pipeline=preprocessing_pipeline):
-    return pipeline.transform(X)
 
 def train_and_save_model():
     print("⏳ Chargement et préparation des données...")
@@ -27,19 +24,19 @@ def train_and_save_model():
 
     print("⏳ Entraînement du modèle (Logistic Regression + Feature Selection)...")
 
-    # Paramètres optimisés issus du notebook
+    # Paramètres optimisés (penalty retiré car défaut='l2' et déprécié)
     best_lr_params = {
-        'C': 0.1, 'penalty': 'l2', 'solver': 'saga',
-        'max_iter': 1000, 'class_weight': 'balanced', 'random_state': 42
+        'C': 0.1, 'solver': 'saga',
+        'max_iter': 100, 'class_weight': 'balanced', 'random_state': 42
     }
 
-    sfm_pipeline = ImbPipeline([
-        ('preprocessing', FunctionTransformer(apply_preprocessing, validate=False)),
+    sfm_pipeline = Pipeline([
+        ('preprocessing', preprocessing_pipeline),
         ('feature_selection', SelectFromModel(
             LogisticRegression(**best_lr_params),
             threshold='0.85*mean'
         )),
-        ('classifier', LogisticRegression(**best_lr_params))
+        ('classifier', LogisticRegression(max_iter=1000, random_state=42, class_weight='balanced'))
     ])
 
     sfm_pipeline.fit(X_train, y_train)
