@@ -53,6 +53,7 @@ uvicorn src.api:app --reload
 
 ## Structure du Projet
 
+```text
 ocrproject5/
 ├── src/
 │   ├── __init__.py
@@ -67,4 +68,4 @@ ocrproject5/
 ├── .gitignore
 ├── requirements.txt
 └── README.md
-
+```
