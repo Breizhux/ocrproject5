@@ -1,0 +1,16 @@
+__pycache__/
+build/
+venv/
+sdist/
+wheels/
+*.egg-info/
+*.egg
+
+data/*.csv
+models/*.pkl
+models/*.joblib
+
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
