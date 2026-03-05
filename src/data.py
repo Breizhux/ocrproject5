@@ -5,8 +5,6 @@ import pandas as pd
 
 def load_data():
     """Charge et fusionne les trois sources de données SIRH."""
-    print("⏳ Chargement des données...")
-
     sirh = pd.read_csv(
         "https://s3.eu-west-1.amazonaws.com/course.oc-static.com/projects/1047_Data+Scientist+ML/P4_DSML_1047/extrait_sirh.csv"
     )
@@ -29,7 +27,6 @@ def load_data():
             df['augementation_salaire_precedente'].str.rstrip(' %').astype(float)
         )
 
-    print(f"✅ Données chargées : {df.shape[0]} lignes, {df.shape[1]} colonnes")
     return df
 
 if __name__ == "__main__":
