@@ -18,8 +18,8 @@ def health_check():
 
 @app.post("/predict", response_model=PredictionOutput)
 def predict_turnover(data: EmployeeInput):
-#    """Prédit le risque de départ d'un employé."""
-#    try:
+    """Prédit le risque de départ d'un employé."""
+    try:
         # Conversion Pydantic -> DataFrame
         input_df = pd.DataFrame([data.dict()])
 
@@ -36,8 +36,8 @@ def predict_turnover(data: EmployeeInput):
             "message": message
         }
 
-#    except Exception as e:
-#        raise HTTPException(status_code=500, detail=f"Erreur de prédiction: {str(e)}")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur de prédiction: {str(e)}")
 
 
 # Chargement du modèle au démarrage
