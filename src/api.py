@@ -44,7 +44,7 @@ def health_check():
 def predict_turnover(data: EmployeeInput):
     """Prédit le risque de départ d'un employé."""
     try:
-        input_df = pd.DataFrame([data.dict()])
+        input_df = pd.DataFrame([data.model_dump()])
 
         # Prédiction
         prediction = model.model.predict(input_df)[0]
