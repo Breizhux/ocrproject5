@@ -8,7 +8,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder, LabelEncoder, FunctionTransformer
 
-# --- Classes de Feature Engineering ---
+
 class FeatureEngineer(BaseEstimator, TransformerMixin):
     def fit(self, X, y=None):
         return self
@@ -22,7 +22,7 @@ class FeatureEngineer(BaseEstimator, TransformerMixin):
         X['recent_change_flag'] = self._create_recent_change_flag(X)
         X['relative_promo_delay'] = self._relative_promo_delay(X)
         return X
-
+ 
     def _compute_satisfaction_moyenne(self, X):
         cols = ['satisfaction_employee_environnement', 'satisfaction_employee_nature_travail',
                 'satisfaction_employee_equipe', 'satisfaction_employee_equilibre_pro_perso']
@@ -71,7 +71,7 @@ class SalaryRatioEncoder(BaseEstimator, TransformerMixin):
         X['salary_to_dept_median'] = X['revenu_mensuel'] / X['departement'].map(self.department_median)
         return X
 
-# --- Fonctions de Transformation (Nommées pour Pickle) ---
+
 def drop_columns_transform(X):
     return X.drop(columns=[c for c in COLUMNS_TO_DROP if c in X.columns], errors='ignore')
 
@@ -89,7 +89,7 @@ def map_frequency(X):
     })
     return X_mapped
 
-# --- Configuration des Colonnes ---
+
 COLUMNS_TO_DROP = [
     'id_employee', 'ayant_enfants', 'nombre_heures_travailless',
     'nombre_employee_sous_responsabilite', 'salary_to_dept_median',
@@ -116,7 +116,7 @@ NUMERIC_BY_FEATURES_ENGINEERING = [
 CATEGORICAL_ONEHOT = ['genre', 'statut_marital', 'departement', 'heure_supplementaires']
 CATEGORICAL_LABEL = ['poste', 'domaine_etude']
 
-# --- Pipelines ---
+
 numeric_pipeline = Pipeline([('scaler', StandardScaler())])
 categorical_onehot_pipeline = Pipeline([('onehot', OneHotEncoder(drop='first', sparse_output=False))])
 categorical_label_pipeline = Pipeline([('label_encoder', FunctionTransformer(label_encode_transform))])

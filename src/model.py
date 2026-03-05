@@ -26,8 +26,12 @@ def train_and_save_model():
 
     # Paramètres optimisés (penalty retiré car défaut='l2' et déprécié)
     best_lr_params = {
-        'C': 0.1, 'solver': 'saga',
-        'max_iter': 100, 'class_weight': 'balanced', 'random_state': 42
+        'C': 0.1,
+        'class_weight': 'balanced',
+        'max_iter': 100,
+        'penalty': 'l2',
+        'solver': 'saga',
+        'random_state': 42
     }
 
     sfm_pipeline = Pipeline([
@@ -48,6 +52,9 @@ def train_and_save_model():
     print("💾 Sauvegarde du modèle dans models/model.pkl...")
     joblib.dump(sfm_pipeline, 'models/model.pkl')
     print("✅ Modèle sauvegardé avec succès.")
+
+    return sfm_pipeline
+
 
 if __name__ == "__main__":
     train_and_save_model()
