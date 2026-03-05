@@ -1,6 +1,10 @@
+numpy
 joblib
 pandas
-numpy
-scikit-learn
-imblearn
 pytest
+imblearn
+scikit-learn
+
+httpx
+fastapi
+pydantic
