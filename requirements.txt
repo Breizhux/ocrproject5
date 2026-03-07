@@ -1,7 +1,7 @@
 numpy
 joblib
 pandas
-pytest
+#pytest
 imblearn
 scikit-learn
 
