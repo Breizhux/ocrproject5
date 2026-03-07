@@ -49,7 +49,7 @@ Lancer le serveur API :
 ```bash
 uvicorn src.api:app --reload
 ```
-*Le téléchargement, nettoyage, entraînement et insertion des données dans la base de données est automatique.*
+*Le téléchargement, nettoyage, entraînement et ~~insertion des données dans la base de données~~ est automatique.*
 
 ### Entraînement du modèle
 Pour lancer uniquement le pipeline d'entraînement et sauvegarder le modèle :

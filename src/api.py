@@ -94,9 +94,9 @@ def save_prediction(employee_data, prediction, probabilite, human_validate=False
 
 
 # create database
-create_db.clear_database()
-create_db.create_tables()
-create_db.load_dataset()
+#create_db.clear_database()
+#create_db.create_tables()
+#create_db.load_dataset()
 
 # create api (and model if needed)
 app = FastAPI(title="API Prédiction Turnover")
