@@ -8,11 +8,12 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.feature_selection import SelectFromModel
 from sklearn.metrics import classification_report
 from sklearn.pipeline import Pipeline
-from src.preprocessing import preprocessing_pipeline
-from src.data import load_data
+
+from .data import load_data
+from .preprocessing import preprocessing_pipeline
 
 def train_and_save_model():
-    print("⏳ Chargement et préparation des données...")
+    print("Chargement et préparation des données...")
     df = load_data()
 
     X = df.drop(columns=['a_quitte_l_entreprise'])
@@ -22,7 +23,7 @@ def train_and_save_model():
         X, y, test_size=0.2, random_state=42, stratify=y
     )
 
-    print("⏳ Entraînement du modèle (Logistic Regression + Feature Selection)...")
+    print("Entraînement du modèle...")
 
     # Paramètres optimisés (penalty retiré car défaut='l2' et déprécié)
     best_lr_params = {
@@ -45,13 +46,13 @@ def train_and_save_model():
 
     sfm_pipeline.fit(X_train, y_train)
 
-    print("✅ Entraînement terminé. Évaluation sur le jeu de test...")
+    print("Entraînement terminé. Évaluation sur le jeu de test...")
     y_pred = sfm_pipeline.predict(X_test)
     print(classification_report(y_test, y_pred, target_names=['Reste', 'Part']))
 
-    print("💾 Sauvegarde du modèle dans models/model.pkl...")
+    print("Sauvegarde du modèle dans models/model.pkl...", end="\r")
     joblib.dump(sfm_pipeline, 'models/model.pkl')
-    print("✅ Modèle sauvegardé avec succès.")
+    print("Sauvegarde du modèle dans models/model.pkl : fait.")
 
     return sfm_pipeline
 

@@ -8,3 +8,7 @@ scikit-learn
 httpx
 fastapi
 pydantic
+
+sqlalchemy
+psycopg2-binary
+python-dotenv

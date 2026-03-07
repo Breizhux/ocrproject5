@@ -14,3 +14,5 @@ models/*.joblib
 htmlcov/
 .pytest_cache/
 .tox/
+.env
+*.sh

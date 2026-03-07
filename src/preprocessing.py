@@ -18,11 +18,11 @@ class FeatureEngineer(BaseEstimator, TransformerMixin):
         X['satisfaction_moyenne'] = self._compute_satisfaction_moyenne(X)
         X['time_in_current_role_ratio'] = self._time_in_current_role_ratio(X)
         X['family_conflict'] = self._create_family_conflict(X)
-        X['training_rate_per_year'] = self._training_rate_per_year(X)
-        X['recent_change_flag'] = self._create_recent_change_flag(X)
-        X['relative_promo_delay'] = self._relative_promo_delay(X)
+#        X['training_rate_per_year'] = self._training_rate_per_year(X)
+#        X['recent_change_flag'] = self._create_recent_change_flag(X)
+#        X['relative_promo_delay'] = self._relative_promo_delay(X)
         return X
- 
+
     def _compute_satisfaction_moyenne(self, X):
         cols = ['satisfaction_employee_environnement', 'satisfaction_employee_nature_travail',
                 'satisfaction_employee_equipe', 'satisfaction_employee_equilibre_pro_perso']
@@ -82,54 +82,108 @@ def label_encode_transform(X):
         X_encoded[col] = le.fit_transform(X_encoded[col].astype(str))
     return X_encoded
 
-def map_frequency(X):
-    X_mapped = X.copy()
-    X_mapped['frequence_deplacement'] = X_mapped['frequence_deplacement'].map({
-        'Aucun': 0, 'Occasionnel': 1, 'Frequent': 2
-    })
-    return X_mapped
+#def map_frequency(X):
+#    X_mapped = X.copy()
+#    X_mapped['frequence_deplacement'] = X_mapped['frequence_deplacement'].map({
+#        'Aucun': 0, 'Occasionnel': 1, 'Frequent': 2
+#    })
+#    return X_mapped
 
 
+#colonne nécessaire au feature engineering mais plus maintenant
 COLUMNS_TO_DROP = [
-    'id_employee', 'ayant_enfants', 'nombre_heures_travailless',
-    'nombre_employee_sous_responsabilite', 'salary_to_dept_median',
-    'annees_dans_l_entreprise', 'niveau_hierarchique_poste'
+    #colonnes utiles
+#    'a_quitte_l_entreprise'
+#    'age',
+#    'genre',
+#    'statut_marital',
+#    'nombre_experiences_precedentes',
+#    'annee_experience_totale',
+#    'satisfaction_employee_environnement',
+#    'note_evaluation_precedente',
+#    'nombre_participation_pee',
+#    'annees_depuis_la_derniere_promotion',
+#    'departement',
+#    'heure_supplementaires',
+    #colonnes inutiles
+    'id_employee',
+    'ayant_enfants',
+    'poste',
+    'niveau_hierarchique_poste',
+    'domaine_etude',
+    'niveau_education',
+    'annees_dans_le_poste_actuel',
+    'note_evaluation_actuelle',
+    'nombre_heures_travailless',
+    'frequence_deplacement',
+    'nombre_employee_sous_responsabilite',
+    'augementation_salaire_precedente',
+    'nb_formations_suivies',
+    #colonnes utiles pour le feature engineering uniquement
+    'satisfaction_employee_nature_travail',
+    'satisfaction_employee_equipe',
+    'satisfaction_employee_equilibre_pro_perso',
+    'annees_dans_l_entreprise',
+    'annes_sous_responsable_actuel',
+    'revenu_mensuel',
+    'distance_domicile_travail'
 ]
 
 NUMERIC_FEATURES = [
-    'age', 'revenu_mensuel', 'nombre_experiences_precedentes',
-    'annee_experience_totale', 'annees_dans_le_poste_actuel',
-    'satisfaction_employee_environnement', 'note_evaluation_precedente',
-    'satisfaction_employee_nature_travail', 'satisfaction_employee_equipe',
-    'satisfaction_employee_equilibre_pro_perso', 'note_evaluation_actuelle',
-    'augementation_salaire_precedente', 'nombre_participation_pee',
-    'nb_formations_suivies', 'distance_domicile_travail',
-    'niveau_education', 'annees_depuis_la_derniere_promotion',
-    'annes_sous_responsable_actuel'
+    'age',
+#    'revenu_mensuel',
+    'nombre_experiences_precedentes',
+    'annee_experience_totale',
+#    'annees_dans_le_poste_actuel',
+    'satisfaction_employee_environnement',
+    'note_evaluation_precedente',
+#    'satisfaction_employee_nature_travail',
+#    'satisfaction_employee_equipe',
+#    'satisfaction_employee_equilibre_pro_perso',
+#    'note_evaluation_actuelle',
+#    'augementation_salaire_precedente',
+    'nombre_participation_pee',
+#    'nb_formations_suivies',
+#    'distance_domicile_travail',
+#    'niveau_education',
+    'annees_depuis_la_derniere_promotion',
+#    'annes_sous_responsable_actuel'
 ]
 
 NUMERIC_BY_FEATURES_ENGINEERING = [
-    'satisfaction_moyenne', 'time_in_current_role_ratio', 'family_conflict',
-    'training_rate_per_year', 'recent_change_flag', 'relative_promo_delay'
+    'satisfaction_moyenne',
+    'time_in_current_role_ratio',
+    'family_conflict',
+#    'training_rate_per_year',
+#    'recent_change_flag',
+#    'relative_promo_delay'
 ]
 
-CATEGORICAL_ONEHOT = ['genre', 'statut_marital', 'departement', 'heure_supplementaires']
-CATEGORICAL_LABEL = ['poste', 'domaine_etude']
+CATEGORICAL_ONEHOT = [
+    'genre',
+    'statut_marital',
+    'departement',
+    'heure_supplementaires'
+]
+#CATEGORICAL_LABEL = [
+#    'poste',
+#    'domaine_etude'
+#]
 
 
 numeric_pipeline = Pipeline([('scaler', StandardScaler())])
 categorical_onehot_pipeline = Pipeline([('onehot', OneHotEncoder(drop='first', sparse_output=False))])
-categorical_label_pipeline = Pipeline([('label_encoder', FunctionTransformer(label_encode_transform))])
-categorical_map_pipeline = Pipeline([('mapper', FunctionTransformer(map_frequency))])
+#categorical_label_pipeline = Pipeline([('label_encoder', FunctionTransformer(label_encode_transform))])
+#categorical_map_pipeline = Pipeline([('mapper', FunctionTransformer(map_frequency))])
 
 preprocessing_pipeline = Pipeline([
     ('feature_engineer', FeatureEngineer()),
-    ('salary_ratio', SalaryRatioEncoder()),
+#    ('salary_ratio', SalaryRatioEncoder()),
     ('drop_columns', FunctionTransformer(drop_columns_transform)),
-    ('map_frequency', categorical_map_pipeline),
+#    ('map_frequency', categorical_map_pipeline),
     ('column_transformer', ColumnTransformer([
         ('num', numeric_pipeline, NUMERIC_FEATURES + NUMERIC_BY_FEATURES_ENGINEERING),
         ('cat_onehot', categorical_onehot_pipeline, CATEGORICAL_ONEHOT),
-        ('cat_label', categorical_label_pipeline, CATEGORICAL_LABEL)
+#        ('cat_label', categorical_label_pipeline, CATEGORICAL_LABEL)
     ], remainder='drop'))
 ])

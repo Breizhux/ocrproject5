@@ -1,28 +1,34 @@
 # Projet 5 - Industrialisation Modèle ML (Turnover Employé)
 
 ## Description
-Pipeline de Machine Learning industriel pour prédire le départ des employés (`a_quitte_l_entreprise`).
-Le projet inclut le prétraitement des données, l'entraînement du modèle, une API de prédiction, une base de données PostgreSQL et une pipeline CI/CD.
+Pipeline de Machine Learning pour prédire le départ des employés (`a_quitte_l_entreprise`).
+
+Le projet inclut :
+1. prétraitement des données
+2. entraînement du modèle
+3. une API de prédiction
+4. une base de données PostgreSQL
+5. un pipeline CI/CD.
 
 ## Installation
 
 ### Prérequis
-- Python 3.8+
+- Python
 - Git
-- PostgreSQL (pour l'étape 4)
+- PostgreSQL
 
 ### Procédure
+
 1. Cloner le dépôt :
    ```bash
-   git clone https://github.com/votre-user/ocrproject5.git
+   git clone https://github.com/breizhux/ocrproject5.git
    cd ocrproject5
    ```
 
 2. Créer un environnement virtuel :
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # Linux/Mac
-   venv\Scripts\activate     # Windows
+   python3 -m venv venv
+   source venv/bin/activate
    ```
 
 3. Installer les dépendances :
@@ -30,10 +36,23 @@ Le projet inclut le prétraitement des données, l'entraînement du modèle, une
    pip install -r requirements.txt
    ```
 
+4. Créer la base de données postgres:
+    ```
+    psql -U postgres -h localhost -d turnover_db
+    ```
+
 ## Utilisation
 
+### API
+
+Lancer le serveur API :
+```bash
+uvicorn src.api:app --reload
+```
+*Le téléchargement, nettoyage, entraînement et insertion des données dans la base de données est automatique.*
+
 ### Entraînement du modèle
-Pour lancer le pipeline d'entraînement et sauvegarder le modèle :
+Pour lancer uniquement le pipeline d'entraînement et sauvegarder le modèle :
 ```bash
 python src/model.py
 ```
@@ -45,11 +64,6 @@ Pour lancer la suite de tests unitaires et fonctionnels :
 pytest tests/ --cov=src
 ```
 
-### API (À venir)
-Pour lancer le serveur API (après développement étape 3) :
-```bash
-uvicorn src.api:app --reload
-```
 
 ## Structure du Projet
 
@@ -57,12 +71,15 @@ uvicorn src.api:app --reload
 ocrproject5/
 ├── src/
 │   ├── __init__.py
+│   ├── api.py           # Serveur d'api
+│   ├── create_db.py     # Création de la base de donnée
 │   ├── data.py          # Chargement et fusion des données
 │   ├── preprocessing.py # Pipelines de transformation
-│   └── model.py         # Entraînement et sauvegarde
+│   ├── model.py         # Entraînement et sauvegarde du modèle
+│   └── schemas.py       # Schéma des données entrantes (pydantic)
 ├── tests/               # Tests unitaires et fonctionnels
 ├── data/                # Données brutes (ignoré par .gitignore)
-├── models/              # Modèles sérialisés (.pkl)
+├── models/              # Modèles sérialisés (.pkl, ignoré par .gitignore)
 ├── docs/                # Documentation technique
 ├── .github/workflows/   # Pipeline CI/CD
 ├── .gitignore
