@@ -37,7 +37,7 @@ def test_health_endpoint():
 def test_predict_endpoint(mock_database):
     """Teste la prédiction avec des données valides."""
     # Attendre que le modèle soit chargé
-    time.sleep(2)
+    time.sleep(4)
     if model.model is None:
         pytest.skip("Modèle non chargé, test ignoré")
 
