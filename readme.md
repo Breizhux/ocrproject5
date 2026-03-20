@@ -1,6 +1,7 @@
 # Projet 5 - Industrialisation Modèle ML (Turnover Employé)
 
 ## Description
+
 Pipeline de Machine Learning pour prédire le départ des employés (`a_quitte_l_entreprise`).
 
 Le projet inclut :
@@ -36,9 +37,15 @@ Le projet inclut :
    pip install -r requirements.txt
    ```
 
-4. Créer la base de données postgres:
-    ```
-    psql -U postgres -h localhost -d turnover_db
+4. Créer la base de données postgres (debian):
+    ```bash
+    apt install postgresql-contrib
+    su postgres
+    psql
+    #change user et password
+    CREATE USER postgres WITH PASSWORD 'postgres';
+    CREATE DATABASE turnover_db OWNER postgres;
+    \q
     ```
 
 ## Utilisation
@@ -50,6 +57,36 @@ Lancer le serveur API :
 uvicorn src.api:app --reload
 ```
 *Le téléchargement, nettoyage, entraînement et ~~insertion des données dans la base de données~~ est automatique.*
+
+#### Appel de l'API
+
+Interface fastapi : [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+
+```bash
+#avec curl:
+curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json" -d '{
+        "id_employee": 1,
+        "age": 41,
+        "genre": "F",
+        "revenu_mensuel": 5993,
+        "statut_marital": "Célibataire",
+        "departement": "Commercial",
+        "nombre_experiences_precedentes": 8,
+        "annee_experience_totale": 8,
+        "annees_dans_l_entreprise": 6,
+        "satisfaction_employee_environnement": 2,
+        "note_evaluation_precedente": 3,
+        "satisfaction_employee_nature_travail": 4,
+        "satisfaction_employee_equipe": 1,
+        "satisfaction_employee_equilibre_pro_perso": 1,
+        "heure_supplementaires": "Oui",
+        "a_quitte_l_entreprise": "Oui",
+        "nombre_participation_pee": 0,
+        "distance_domicile_travail": 1,
+        "annees_depuis_la_derniere_promotion": 0,
+        "annes_sous_responsable_actuel": 5
+    }'
+```
 
 ### Entraînement du modèle
 Pour lancer uniquement le pipeline d'entraînement et sauvegarder le modèle :
@@ -80,9 +117,15 @@ ocrproject5/
 ├── tests/               # Tests unitaires et fonctionnels
 ├── data/                # Données brutes (ignoré par .gitignore)
 ├── models/              # Modèles sérialisés (.pkl, ignoré par .gitignore)
-├── docs/                # Documentation technique
 ├── .github/workflows/   # Pipeline CI/CD
 ├── .gitignore
 ├── requirements.txt
 └── README.md
 ```
+
+# Fonctionnement de l'API
+
+L'API propose deux endpoints :
+
+- `/predict` : prend en entrée un dictionnaire avec les données à prédire (cf Utilisation de l'API).
+- `/health` : retourne le statut de l'API (si disponible, si le modèle est chargé, etc).
